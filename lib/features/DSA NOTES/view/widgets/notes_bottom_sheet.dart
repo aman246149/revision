@@ -1,10 +1,10 @@
+import 'dart:math';
+
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
-
+import 'package:animated_icon/animated_icon.dart';
 import '../../../../providers/audio_provider.dart';
 import '../../../../services/hive_adapters/notes.dart';
-
-
 
 class CustomBottomSheet extends StatefulWidget {
   const CustomBottomSheet(
@@ -84,10 +84,9 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
               Expanded(
                 child: ElevatedButton(
                     onPressed: () {
-                      widget.audioProvider.setCurrentPlayingRecording(widget
-                          .audioProvider.recordingList[widget.index].key!);
-                      widget.audioProvider.isPlayForDb = true;
-                      widget.audioProvider.startStopPlayer();
+                      if (widget.audioProvider.player!.isPlaying) {
+                        widget.audioProvider.startStopPlayer();
+                      }
                       setState(() {});
                     },
                     child: const Text("Stop")),
