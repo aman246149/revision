@@ -35,6 +35,24 @@ class _NotesViewState extends State<NotesView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Notes"),
+        actions: [
+          PopupMenuButton<String>(
+            icon: Icon(Icons.filter_alt),
+            itemBuilder: (BuildContext context) {
+              return audioProvider.filters.map((String item) {
+                return PopupMenuItem<String>(
+                  value: item,
+                  child: Text(item),
+                );
+              }).toList();
+            },
+            onSelected: (String selectedValue) {
+              // Handle selected value
+              print('Selected: $selectedValue');
+            },
+          ),
+          SizedBox(width: 15),
+        ],
       ),
       body: audioProviderWatch.isLoading
           ? const Center(

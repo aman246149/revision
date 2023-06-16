@@ -30,6 +30,7 @@ class AudioProvider extends ChangeNotifier {
 
   bool isPlayForDb = false;
   String _currentPlayingRecording = "";
+  Set<String> filters = {};
 
   StreamController<Duration>? duration = StreamController.broadcast();
   StreamController<Duration>? position = StreamController.broadcast();
@@ -112,6 +113,9 @@ class AudioProvider extends ChangeNotifier {
       _isLoading = true;
 
       _recordingList = await _dataBaseService.getAllRecordings();
+      for (var e in _recordingList) {
+        filters.add(e.topicName ?? "");
+      }
 
       _isLoading = false;
       notifyListeners();
