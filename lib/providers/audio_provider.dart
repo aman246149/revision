@@ -112,9 +112,14 @@ class AudioProvider extends ChangeNotifier {
     try {
       _isLoading = true;
 
-      _recordingList = await _dataBaseService.getAllRecordings();
-      for (var e in _recordingList) {
-        filters.add(e.topicName ?? "");
+      List<dynamic> keys = await _dataBaseService.getAllDataKeys();
+      for (var key in keys) {
+        var notes = await _dataBaseService.getBox(key) as Notes?;
+        if (notes != null) {
+          notes.key = key;
+          _recordingList.add(notes);
+          filters.add(notes.topicName ?? "");
+        }
       }
 
       _isLoading = false;

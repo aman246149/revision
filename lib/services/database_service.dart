@@ -1,56 +1,46 @@
-
 import 'package:hive/hive.dart';
 import 'package:injectable/injectable.dart';
 
-import 'hive_adapters/notes.dart';
-
 @lazySingleton
-class DataBaseService {
-  Box? box;
+class DataBaseService<T> {
+  Box<T>? box;
 
-  Future<void> openBox() async {
-    Hive.registerAdapter(NotesAdapter()); // Register the NotesAdapter
-    box = await Hive.openBox('sound_box');
+  Future<void> openBox(String boxName) async {
+    box = await Hive.openBox<T>(boxName);
   }
 
-  Future<void> putBox(Notes notes) async {
-    // Update the method to accept Notes
+  Future<void> putBox(String key, T data) async {
     if (box == null) {
       throw Exception('Box is not opened');
     }
-    await box!.put(notes.dateTime.toString(), notes);
+    await box!.put(key, data);
   }
 
-  Future<Notes?> getBox(String key) async {
+  Future<T?> getBox(String key) async {
     if (box == null) {
       throw Exception('Box is not opened');
     }
-    var data = await box!.get(key) as Notes?;
-    print(data);
-    return await box!.get(key) as Notes?;
+    return await box!.get(key);
   }
 
-  Future<List<Notes>> getAllRecordings() async {
+  Future<List<T>> getAllData() async {
     if (box == null) {
       return [];
     }
-    var keys = box!.keys.toList();
-    var notesList = <Notes>[];
-    for (var key in keys) {
-      var notes = box!.get(key) as Notes?;
-      if (notes != null) {
-        notes.key = key;
-        notesList.add(notes);
-      }
-    }
-    return notesList;
+    return box!.values.toList();
   }
+
+  Future<List<dynamic>> getAllDataKeys()  async{
+  if (box == null) {
+    return [];
+  }
+  return box!.keys.toList();
+}
 
   Future<void> deleteBox() async {
     if (box == null) {
       throw Exception('Box is not opened');
     }
-
-    await box!.delete('sound');
+    await box!.clear();
   }
 }

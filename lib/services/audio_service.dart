@@ -124,7 +124,7 @@ class AudioService {
             ..topicName = 'Example Topic'
             ..dateTime = DateTime.now();
           // Store the file path in the database
-          await GetIt.I<DataBaseService>().putBox(notes);
+          await GetIt.I<DataBaseService>().putBox(notes.dateTime.toString(),notes);
          
         }
       });

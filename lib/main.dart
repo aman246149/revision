@@ -1,6 +1,7 @@
 import 'package:dsanotes/providers/audio_provider.dart';
 import 'package:dsanotes/services/audio_service.dart';
 import 'package:dsanotes/services/database_service.dart';
+import 'package:dsanotes/services/hive_adapters/notes.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -13,7 +14,8 @@ import 'features/DSA NOTES/view/screens/notes.dart';
 void main() async {
   await configureDependencies();
   await Hive.initFlutter();
-  await GetIt.I<DataBaseService>().openBox();
+  Hive.registerAdapter(NotesAdapter()); // Register the NotesAdapter
+  await GetIt.I<DataBaseService>().openBox('sound_box');
   runApp(const MainApp());
 }
 
