@@ -1,7 +1,9 @@
 import 'package:dsanotes/providers/audio_provider.dart';
+import 'package:dsanotes/providers/video_provider.dart';
 import 'package:dsanotes/services/audio_service.dart';
 import 'package:dsanotes/services/database_service.dart';
 import 'package:dsanotes/services/hive_adapters/notes.dart';
+import 'package:dsanotes/services/video_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -29,6 +31,11 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => AudioProvider(
               GetIt.I<AudioService>(), GetIt.I<DataBaseService>()),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => VideoProvider(
+            GetIt.I<VideoService>(),
+          ),
         )
       ],
       child: MaterialApp(

@@ -1,3 +1,4 @@
+import 'package:dsanotes/providers/video_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -54,6 +55,9 @@ class _NotesViewState extends State<NotesView> {
                   width: double.infinity,
                   child: FilterList(),
                 ),
+                SizedBox(
+                  height: 20,
+                ),
                 Expanded(
                   child: ListView.separated(
                     itemCount: audioProviderWatch.recordingList.length,
@@ -73,8 +77,14 @@ class _NotesViewState extends State<NotesView> {
                               index: index,
                               notes: audioProvider.recordingList[index],
                             ),
-                          ).whenComplete(
-                              () => audioProvider.cancelAllSubscriptions());
+                          ).whenComplete(() {
+                            audioProvider.cancelAllSubscriptions();
+                            context.read<VideoProvider>().closeVideoPlayer();
+                          });
+                        },
+                        onDelete: () {
+                          audioProvider.deleteNotes(
+                              audioProvider.recordingList[index].key!);
                         },
                       );
                     },
@@ -83,7 +93,7 @@ class _NotesViewState extends State<NotesView> {
               ],
             ),
       bottomNavigationBar: Visibility(
-        visible: true,
+        visible: false,
         child: Container(
           margin: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,

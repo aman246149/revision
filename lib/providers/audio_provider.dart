@@ -161,4 +161,9 @@ class AudioProvider extends ChangeNotifier {
     selectedFilterIndex = index;
     notifyListeners();
   }
+
+  void deleteNotes(String key) async {
+    await _dataBaseService.deleteData(key);
+    getListAllRecordingNotes();
+  }
 }

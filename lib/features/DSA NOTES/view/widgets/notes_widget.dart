@@ -1,3 +1,4 @@
+import "package:dsanotes/features/DSA%20NOTES/view/widgets/pop_up_menu_widget.dart";
 import "package:flutter/material.dart";
 import "package:intl/intl.dart";
 
@@ -8,11 +9,12 @@ class NotesWidget extends StatelessWidget {
     super.key,
     required this.notes,
     required this.index,
-    required this.onTap,
+    required this.onTap, required this.onDelete,
   });
   final Notes notes;
   final int index;
   final Function() onTap;
+  final Function() onDelete;
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -31,7 +33,11 @@ class NotesWidget extends StatelessWidget {
               .textTheme
               .bodyMedium!
               .copyWith(fontSize: 15, fontWeight: FontWeight.w400)),
-      trailing: IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
+      trailing: GestureDetector(
+          onTapDown: (TapDownDetails details) {
+            showPopupMenu(context, details.globalPosition,onDelete);
+          },
+          child: Icon(Icons.more_vert)),
     );
   }
 }

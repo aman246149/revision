@@ -30,12 +30,20 @@ class DataBaseService<T> {
     return box!.values.toList();
   }
 
-  Future<List<dynamic>> getAllDataKeys()  async{
-  if (box == null) {
-    return [];
+  Future<List<dynamic>> getAllDataKeys() async {
+    if (box == null) {
+      return [];
+    }
+    return box!.keys.toList();
   }
-  return box!.keys.toList();
-}
+
+  Future<void> deleteData(String key) async {
+    if (box == null) {
+      throw Exception('Box is not opened');
+    }
+
+    await box!.delete(key);
+  }
 
   Future<void> deleteBox() async {
     if (box == null) {
