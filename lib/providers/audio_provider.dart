@@ -111,6 +111,7 @@ class AudioProvider extends ChangeNotifier {
   }
 
   Future<void> getListAllRecordingNotes() async {
+    _recordingList = [];
     try {
       _isLoading = true;
 

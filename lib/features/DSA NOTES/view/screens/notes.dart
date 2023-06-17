@@ -83,7 +83,7 @@ class _NotesViewState extends State<NotesView> {
               ],
             ),
       bottomNavigationBar: Visibility(
-        visible: false,
+        visible: true,
         child: Container(
           margin: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
