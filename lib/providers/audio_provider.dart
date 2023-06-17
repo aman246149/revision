@@ -31,12 +31,14 @@ class AudioProvider extends ChangeNotifier {
   bool isPlayForDb = false;
   String _currentPlayingRecording = "";
   Set<String> filters = {};
+  int selectedFilterIndex = 0;
 
   StreamController<Duration>? duration = StreamController.broadcast();
   StreamController<Duration>? position = StreamController.broadcast();
   StreamSubscription<PlaybackDisposition>? playerOnProgress;
 
   Future<void> initAudioService() async {
+    filters.add("All");
     await _audioService.init();
     print(duration);
     getOnProgress();
@@ -152,5 +154,10 @@ class AudioProvider extends ChangeNotifier {
     // position?.close();
     // playerOnProgress?.cancel();
     _audioService.stopPlayer();
+  }
+
+  void selectFilterIndex(int index) {
+    selectedFilterIndex = index;
+    notifyListeners();
   }
 }
