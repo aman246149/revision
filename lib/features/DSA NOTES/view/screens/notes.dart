@@ -72,10 +72,22 @@ class _NotesViewState extends State<NotesView> {
                         onTap: () async {
                           await showModalBottomSheet(
                             context: context,
-                            builder: (_) => CustomBottomSheet(
-                              audioProvider: audioProvider,
-                              index: index,
-                              notes: audioProvider.recordingList[index],
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (_) => Container(
+                              height: MediaQuery.of(context).size.height * 0.92,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(25.0),
+                                  topRight: Radius.circular(25.0),
+                                ),
+                              ),
+                              child: CustomBottomSheet(
+                                audioProvider: audioProvider,
+                                index: index,
+                                notes: audioProvider.recordingList[index],
+                              ),
                             ),
                           ).whenComplete(() {
                             audioProvider.cancelAllSubscriptions();

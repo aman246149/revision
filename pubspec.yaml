@@ -30,6 +30,7 @@ dependencies:
   animated_icon: ^0.0.5
   flutter_animate: ^4.1.1+1
   video_player: ^2.6.1
+  url_launcher: ^6.1.11
   
 
 dev_dependencies:

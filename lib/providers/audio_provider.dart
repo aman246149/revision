@@ -36,6 +36,10 @@ class AudioProvider extends ChangeNotifier {
   StreamController<Duration>? duration = StreamController.broadcast();
   StreamController<Duration>? position = StreamController.broadcast();
   StreamSubscription<PlaybackDisposition>? playerOnProgress;
+  List<String> referesList = [
+    "https://www.youtube.com/watch?v=v_nhv6aY1Kg&ab_channel=GOTOConferences",
+    "https://www.youtube.com/watch?v=k85mRPqvMbE&ab_channel=CrazyFrog"
+  ];
 
   Future<void> initAudioService() async {
     filters.add("All");
