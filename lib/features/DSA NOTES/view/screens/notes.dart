@@ -1,8 +1,10 @@
+import 'package:dsanotes/features/DSA%20NOTES/view/screens/add_notes.dart';
 import 'package:dsanotes/providers/video_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../providers/audio_provider.dart';
+import '../widgets/app_bar.dart';
 import '../widgets/filter_list.dart';
 import '../widgets/notes_bottom_sheet.dart';
 import '../widgets/notes_widget.dart';
@@ -35,15 +37,7 @@ class _NotesViewState extends State<NotesView> {
     final audioProvider = context.read<AudioProvider>();
     final audioProviderWatch = context.watch<AudioProvider>();
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "My Notes",
-          style: Theme.of(context)
-              .textTheme
-              .bodyMedium!
-              .copyWith(fontSize: 24, fontWeight: FontWeight.w800),
-        ),
-      ),
+      appBar: CommonAppBar(text: "My Notes"),
       body: audioProviderWatch.isLoading
           ? const Center(
               child: CircularProgressIndicator(),
@@ -137,7 +131,13 @@ class _NotesViewState extends State<NotesView> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddNotes(),
+              ));
+        },
         child: Icon(Icons.add),
       ),
     );
