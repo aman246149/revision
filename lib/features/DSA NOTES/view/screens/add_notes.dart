@@ -2,6 +2,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../../services/image_picker_service.dart';
+
 enum NoteOption {
   Audio,
   Video,
@@ -24,7 +26,7 @@ class _AddNotesState extends State<AddNotes> {
   final List<String> _tags = [];
   final List<String> _references = [];
   final List<NoteOption> _selectedOptions = [];
-  final List<XFile> _selectedImages = [];
+  List<XFile>? _selectedImages = [];
 
   @override
   void initState() {
@@ -186,29 +188,18 @@ class _AddNotesState extends State<AddNotes> {
               SizedBox(height: 8),
               Row(
                 children: [
-                  IconButton(
-                    onPressed: () async {
-                      // Logic for selecting audio from device
-                      FilePickerResult? result =
-                          await FilePicker.platform.pickFiles(
-                        type: FileType.audio,
-                      );
-                      if (result != null && result.files.isNotEmpty) {
-                        setState(() {
-                          // Handle the selected audio file
-                          PlatformFile file = result.files.first;
-                          // Do something with the selected audio file
-                        });
-                      }
-                    },
-                    icon: const Icon(Icons.audiotrack),
+                  CommonButton(
+                    icon: Icons.record_voice_over,
+                    text: "Record audio",
+                    onTap: () async {},
                   ),
-                  IconButton(
-                    onPressed: () {
-                      // Logic for recording audio
-                      // Implement your audio recording logic here
-                    },
-                    icon: const Icon(Icons.mic),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  CommonButton(
+                    icon: Icons.play_arrow,
+                    text: "Play audio",
+                    onTap: () async {},
                   ),
                 ],
               ),
@@ -227,36 +218,18 @@ class _AddNotesState extends State<AddNotes> {
               SizedBox(height: 8),
               Row(
                 children: [
-                  IconButton(
-                    onPressed: () async {
-                      // Logic for selecting video from device
-                      FilePickerResult? result =
-                          await FilePicker.platform.pickFiles(
-                        type: FileType.video,
-                      );
-                      if (result != null && result.files.isNotEmpty) {
-                        setState(() {
-                          // Handle the selected video file
-                          PlatformFile file = result.files.first;
-                          // Do something with the selected video file
-                        });
-                      }
-                    },
-                    icon: const Icon(Icons.video_library),
+                  CommonButton(
+                    icon: Icons.photo_sharp,
+                    text: "From Gallery",
+                    onTap: () async {},
                   ),
-                  IconButton(
-                    onPressed: () async {
-                      // Logic for recording video using camera
-                      XFile? recordedVideo = await ImagePicker()
-                          .pickVideo(source: ImageSource.camera);
-                      if (recordedVideo != null) {
-                        setState(() {
-                          // Handle the recorded video
-                          // Do something with the recorded video
-                        });
-                      }
-                    },
-                    icon: const Icon(Icons.videocam),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  CommonButton(
+                    icon: Icons.camera_alt,
+                    text: "From Camera",
+                    onTap: () async {},
                   ),
                 ],
               ),
@@ -275,31 +248,22 @@ class _AddNotesState extends State<AddNotes> {
               SizedBox(height: 8),
               Row(
                 children: [
-                  IconButton(
-                    onPressed: () async {
-                      // Logic for selecting images from device
-                      List<XFile>? selectedImages =
-                          await ImagePicker().pickMultiImage();
-                      setState(() {
-                        // Handle the selected images
-                        // Do something with the selected images
-                      });
+                  CommonButton(
+                    icon: Icons.photo_sharp,
+                    text: "From Gallery",
+                    onTap: () async {
+                      _selectedImages = await ImagePickerService().pickImages();
                     },
-                    icon: const Icon(Icons.photo_library),
                   ),
-                  IconButton(
-                    onPressed: () async {
-                      // Logic for capturing image using camera
-                      XFile? capturedImage = await ImagePicker()
-                          .pickImage(source: ImageSource.camera);
-                      if (capturedImage != null) {
-                        setState(() {
-                          // Handle the captured image
-                          // Do something with the captured image
-                        });
-                      }
+                  SizedBox(
+                    width: 10,
+                  ),
+                  CommonButton(
+                    icon: Icons.camera_alt,
+                    text: "From Camera",
+                    onTap: () async {
+                      _selectedImages = await ImagePickerService().pickImages();
                     },
-                    icon: const Icon(Icons.camera_alt),
                   ),
                 ],
               ),
@@ -372,5 +336,29 @@ class _AddNotesState extends State<AddNotes> {
     _tagController.dispose();
     _referenceController.dispose();
     super.dispose();
+  }
+}
+
+class CommonButton extends StatelessWidget {
+  const CommonButton({
+    super.key,
+    required this.onTap,
+    required this.text,
+    required this.icon,
+  });
+  final Function() onTap;
+  final String text;
+  final IconData icon;
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: ElevatedButton.icon(
+        onPressed: () {
+          onTap();
+        },
+        label: Text(text),
+        icon: Icon(icon),
+      ),
+    );
   }
 }

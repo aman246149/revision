@@ -2,10 +2,10 @@ import 'package:injectable/injectable.dart';
 import 'package:video_player/video_player.dart';
 
 @lazySingleton
-class VideoService {
+class VideoPlayService {
   late VideoPlayerController _controller;
 
-  VideoService();
+  VideoPlayService();
 
   Future<void> initializeVideo(String videoPath) async {
     _controller = VideoPlayerController.network(videoPath);

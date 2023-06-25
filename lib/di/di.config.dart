@@ -14,7 +14,7 @@ import 'package:injectable/injectable.dart' as _i2;
 
 import '../services/audio_service.dart' as _i3;
 import '../services/database_service.dart' as _i4;
-import '../services/video_service.dart' as _i5;
+import '../services/video_play_service.dart' as _i5;
 
 extension GetItInjectableX on _i1.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -30,7 +30,7 @@ extension GetItInjectableX on _i1.GetIt {
     gh.lazySingleton<_i3.AudioService>(() => _i3.AudioService());
     gh.lazySingleton<_i4.DataBaseService<dynamic>>(
         () => _i4.DataBaseService<dynamic>());
-    gh.lazySingleton<_i5.VideoService>(() => _i5.VideoService());
+    gh.lazySingleton<_i5.VideoPlayService>(() => _i5.VideoPlayService());
     return this;
   }
 }
