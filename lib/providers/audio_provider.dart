@@ -6,6 +6,7 @@ import 'package:dsanotes/services/hive_adapters/notes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:flutter_sound/public/flutter_sound_recorder.dart';
+import 'package:get_it/get_it.dart';
 
 import '../services/audio_service.dart';
 
@@ -49,7 +50,19 @@ class AudioProvider extends ChangeNotifier {
   }
 
   Future<void> _record() async {
-    await _audioService.record();
+    await _audioService.record(
+      (audioPath) async {
+        var notes = Notes()
+          ..filePath = audioPath
+          ..fileName =
+              'Find two sum in a sorted array using two pointer approach'
+          ..topicName = 'Example Topic'
+          ..dateTime = DateTime.now();
+        // Store the file path in the database
+        await GetIt.I<DataBaseService>()
+            .putBox(notes.dateTime.toString(), notes);
+      },
+    );
     notifyListeners();
   }
 

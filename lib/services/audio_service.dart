@@ -85,7 +85,7 @@ class AudioService {
     }
   }
 
-  Future<void> record() async {
+  Future<void> record(Function(String) whenRecordCompleted) async {
     try {
       var status = await Permission.microphone.request();
       if (status != PermissionStatus.granted) {
@@ -118,14 +118,7 @@ class AudioService {
         if (!isRecording) {
           timer.cancel();
 
-          var notes = Notes()
-            ..filePath = _mPath
-            ..fileName = 'example.txt'
-            ..topicName = 'Example Topic'
-            ..dateTime = DateTime.now();
-          // Store the file path in the database
-          await GetIt.I<DataBaseService>().putBox(notes.dateTime.toString(),notes);
-         
+          whenRecordCompleted(_mPath);
         }
       });
     } catch (e) {
