@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'dart:io';
 
 import 'package:dsanotes/providers/video_provider.dart';
@@ -5,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
-import 'package:dynamic_color/dynamic_color.dart';
 import '../../../../providers/audio_provider.dart';
 import '../../../../services/get_video_service.dart';
 import '../../../../services/image_picker_service.dart';
@@ -189,6 +190,9 @@ class _AddNotesState extends State<AddNotes> {
           value: _selectedOptions.contains(option),
           onChanged: (value) {
             if (_selectedOptions.contains(option)) {
+              // if (option == NoteOption.Text) {
+              //   return;
+              // }
               _selectedOptions.remove(option);
             } else {
               _selectedOptions.add(option);
@@ -222,7 +226,7 @@ class _AddNotesState extends State<AddNotes> {
                     icon: Icons.record_voice_over,
                     text: audioProviderWatch.recorder!.isRecording
                         ? "Stop audio"
-                        : "Play audio",
+                        : "Record audio",
                     onTap: () async {
                       audioProvider.startStopRecorder();
                     },
@@ -326,29 +330,31 @@ class _AddNotesState extends State<AddNotes> {
                 ],
               ),
               const SizedBox(height: 8),
-              SizedBox(
-                height: 180,
-                child: ListView.separated(
-                  itemCount: _selectedImages?.length ?? 0,
-                  separatorBuilder: (context, index) => SizedBox(
-                    width: 10,
-                  ),
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        height: 150,
-                        width: 200,
-                        child: Image.file(
-                          File(_selectedImages![index].path),
-                          fit: BoxFit.cover,
+              _selectedImages!.isEmpty
+                  ? const SizedBox()
+                  : SizedBox(
+                      height: 180,
+                      child: ListView.separated(
+                        itemCount: _selectedImages?.length ?? 0,
+                        separatorBuilder: (context, index) => SizedBox(
+                          width: 10,
                         ),
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              height: 150,
+                              width: 200,
+                              child: Image.file(
+                                File(_selectedImages![index].path),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
-              ),
+                    ),
               const SizedBox(height: 8),
             ],
           );
