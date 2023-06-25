@@ -11,14 +11,15 @@ class VideoProvider extends ChangeNotifier {
   VideoPlayerController get videoPlayerController =>
       _videoService.videoController;
 
-  void setVideoPath(String videoPath) async {
-    await _videoService.initializeVideo(videoPath);
+  Future<void> setVideoPath(String videoPath, bool isLocalSource) async {
+    await _videoService.initializeVideo(videoPath, isLocalSource);
     isVideoLoading = false;
     _videoService.play();
     notifyListeners();
   }
 
   void closeVideoPlayer() {
+    isVideoLoading = true;
     _videoService.stop();
   }
 }

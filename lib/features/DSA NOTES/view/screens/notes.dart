@@ -98,38 +98,6 @@ class _NotesViewState extends State<NotesView> {
                 ),
               ],
             ),
-      bottomNavigationBar: Visibility(
-        visible: true,
-        child: Container(
-          margin: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          height: 100,
-          width: double.infinity,
-          color: Colors.red,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-                onPressed: () {
-                  audioProvider.startStopRecorder();
-                },
-                child: Text(
-                  audioProviderWatch.recorder!.isRecording ? "Stop" : "Record",
-                ),
-              ),
-              const SizedBox(width: 16),
-              ElevatedButton(
-                onPressed: () {
-                  audioProvider.startStopPlayer();
-                },
-                child: Text(
-                    audioProviderWatch.player!.isPlaying ? "Stop" : "Play"),
-              ),
-            ],
-          ),
-        ),
-      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:injectable/injectable.dart';
 import 'package:video_player/video_player.dart';
 
@@ -7,9 +9,17 @@ class VideoPlayService {
 
   VideoPlayService();
 
-  Future<void> initializeVideo(String videoPath) async {
-    _controller = VideoPlayerController.network(videoPath);
-    await _controller.initialize();
+  Future<void> initializeVideo(String videoPath, bool isLocalVideo) async {
+    try {
+      if (isLocalVideo) {
+        _controller = VideoPlayerController.file(File(videoPath));
+      } else {
+        _controller = VideoPlayerController.network(videoPath);
+      }
+      await _controller.initialize();
+    } catch (e) {
+      print(e);
+    }
   }
 
   void play() {

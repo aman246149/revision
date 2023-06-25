@@ -21,4 +21,23 @@ class ImagePickerService {
 
     return images;
   }
+
+  Future<List<XFile>> pickImagesFromCamera() async {
+    List<XFile>? images = [];
+
+    try {
+      XFile? pickedImages =
+          await ImagePicker().pickImage(source: ImageSource.camera);
+
+      if (pickedImages != null) {
+        images.add(pickedImages);
+      }
+    } catch (e) {
+      // Handle the exception
+      print('Error: $e');
+      rethrow;
+    }
+
+    return images;
+  }
 }

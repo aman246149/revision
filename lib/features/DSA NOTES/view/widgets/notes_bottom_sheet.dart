@@ -1,4 +1,3 @@
-
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:dsanotes/providers/video_provider.dart';
 import 'package:dsanotes/services/url_launcher_service.dart';
@@ -35,7 +34,8 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
   void initState() {
     super.initState();
     context.read<VideoProvider>().setVideoPath(
-        "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4");
+        "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4",
+        false);
   }
 
   void _toggleFullScreen() {
@@ -112,8 +112,8 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                         canlaunchUrl(e);
                       },
                       child: Container(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 5),
                         decoration: BoxDecoration(
                             color: Theme.of(context).primaryColorLight,
                             border: Border.all(),

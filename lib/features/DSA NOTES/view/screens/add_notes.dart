@@ -1,7 +1,13 @@
-import 'package:file_picker/file_picker.dart';
+import 'dart:io';
+
+import 'package:dsanotes/providers/video_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:provider/provider.dart';
+import 'package:video_player/video_player.dart';
+import 'package:dynamic_color/dynamic_color.dart';
+import '../../../../providers/audio_provider.dart';
+import '../../../../services/get_video_service.dart';
 import '../../../../services/image_picker_service.dart';
 
 enum NoteOption {
@@ -27,7 +33,9 @@ class _AddNotesState extends State<AddNotes> {
   final List<String> _references = [];
   final List<NoteOption> _selectedOptions = [];
   List<XFile>? _selectedImages = [];
-
+  String? videoPath = "";
+  final kHintStyle = const TextStyle(color: Colors.grey, fontSize: 14);
+  Color color = Colors.red;
   @override
   void initState() {
     super.initState();
@@ -36,123 +44,142 @@ class _AddNotesState extends State<AddNotes> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Notes'),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Question Title',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _questionTitleController,
-                decoration: const InputDecoration(
-                  hintText: 'Enter question title',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'Select Note Type',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              Wrap(
+    return WillPopScope(
+      onWillPop: () async {
+        context.read<VideoProvider>().closeVideoPlayer();
+        return Future.value(true);
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Add Notes'),
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildOptionTile(NoteOption.Audio),
-                  _buildOptionTile(NoteOption.Video),
-                  _buildOptionTile(NoteOption.Images),
-                  _buildOptionTile(NoteOption.Text),
-                ],
-              ),
-              const SizedBox(height: 16),
+                  const Text(
+                    'Note Title',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: _questionTitleController,
+                    decoration: const InputDecoration(
+                      hintText: 'Find max in Array without Sorting',
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Select Note Type',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  Wrap(
+                    children: [
+                      _buildOptionTile(NoteOption.Audio),
+                      _buildOptionTile(NoteOption.Video),
+                      _buildOptionTile(NoteOption.Images),
+                      _buildOptionTile(NoteOption.Text),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
 
-              _buildSelectedOptionFields(),
-              const SizedBox(height: 16),
-              const Text(
-                'Tags',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _tagController,
-                decoration: InputDecoration(
-                  hintText: 'Enter tag',
-                  border: const OutlineInputBorder(),
-                  suffixIcon: IconButton(
-                    onPressed: () {
+                  _buildSelectedOptionFields(),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Tags',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: _tagController,
+                    decoration: InputDecoration(
+                      hintText: 'Enter tag (Like Graph,Arrays)',
+                      border: const OutlineInputBorder(),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _tags.add(_tagController.text.trim());
+                            _tagController.clear();
+                          });
+                        },
+                        icon: const Icon(Icons.add),
+                      ),
+                    ),
+                    onSubmitted: (value) {
                       setState(() {
-                        _tags.add(_tagController.text.trim());
+                        _tags.add(value.trim());
                         _tagController.clear();
                       });
                     },
-                    icon: const Icon(Icons.add),
                   ),
-                ),
-                onSubmitted: (value) {
-                  setState(() {
-                    _tags.add(value.trim());
-                    _tagController.clear();
-                  });
-                },
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                children: _buildTagChips(_tags),
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'References',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 8),
-              TextField(
-                controller: _referenceController,
-                decoration: InputDecoration(
-                  hintText: 'Enter references',
-                  border: const OutlineInputBorder(),
-                  suffixIcon: IconButton(
-                    onPressed: () {
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    children: _buildTagChips(_tags),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'References',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: _referenceController,
+                    decoration: InputDecoration(
+                      hintText: 'Enter references (Like Google)',
+                      border: const OutlineInputBorder(),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _references.add(_referenceController.text.trim());
+                            _referenceController.clear();
+                          });
+                        },
+                        icon: const Icon(Icons.add),
+                      ),
+                    ),
+                    onSubmitted: (value) {
                       setState(() {
-                        _references.add(_referenceController.text.trim());
+                        _references.add(value.trim());
                         _referenceController.clear();
                       });
                     },
-                    icon: const Icon(Icons.add),
                   ),
-                ),
-                onSubmitted: (value) {
-                  setState(() {
-                    _references.add(value.trim());
-                    _referenceController.clear();
-                  });
-                },
-              ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                children: _buildReferenceChips(_references),
-              ),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    children: _buildReferenceChips(_references),
+                  ),
 
-              const SizedBox(height: 8),
-              // ListView.builder(
-              //   shrinkWrap: true,
-              //   itemCount: _selectedImages.length,
-              //   itemBuilder: (context, index) {
-              //     return Image.file(File(_selectedImages[index].path));
-              //   },
-              // ),
-            ],
+                  const SizedBox(height: 8),
+                  // ListView.builder(
+                  //   shrinkWrap: true,
+                  //   itemCount: _selectedImages.length,
+                  //   itemBuilder: (context, index) {
+                  //     return Image.file(File(_selectedImages[index].path));
+                  //   },
+                  // ),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+          bottomNavigationBar: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextButton(
+              style: TextButton.styleFrom(
+                  backgroundColor: Colors.green.shade100,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20))),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: const Text("SAVE"),
+              ),
+              onPressed: () {},
+            ),
+          )),
     );
   }
 
@@ -173,6 +200,9 @@ class _AddNotesState extends State<AddNotes> {
   }
 
   Widget _buildSelectedOptionFields() {
+    final audioProvider = context.read<AudioProvider>();
+    final audioProviderWatch = context.watch<AudioProvider>();
+    final videoProvider = context.read<VideoProvider>();
     return Column(
       children: _selectedOptions.map((option) {
         Widget optionWidget;
@@ -180,26 +210,34 @@ class _AddNotesState extends State<AddNotes> {
           optionWidget = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               const Text(
                 'Add Audio Note Here',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Row(
                 children: [
                   CommonButton(
                     icon: Icons.record_voice_over,
-                    text: "Record audio",
-                    onTap: () async {},
+                    text: audioProviderWatch.recorder!.isRecording
+                        ? "Stop audio"
+                        : "Play audio",
+                    onTap: () async {
+                      audioProvider.startStopRecorder();
+                    },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   CommonButton(
                     icon: Icons.play_arrow,
-                    text: "Play audio",
-                    onTap: () async {},
+                    text: audioProviderWatch.player!.isPlaying
+                        ? "Stop audio"
+                        : "Play audio",
+                    onTap: () async {
+                      audioProvider.startStopPlayer();
+                    },
                   ),
                 ],
               ),
@@ -210,29 +248,46 @@ class _AddNotesState extends State<AddNotes> {
           optionWidget = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               const Text(
                 'Add Video Note Here',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Row(
                 children: [
                   CommonButton(
                     icon: Icons.photo_sharp,
                     text: "From Gallery",
-                    onTap: () async {},
+                    onTap: () async {
+                      videoPath = await VideoService().videoFromGallery();
+                      videoProvider.setVideoPath(videoPath!, true);
+                      setState(() {});
+                    },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   CommonButton(
                     icon: Icons.camera_alt,
                     text: "From Camera",
-                    onTap: () async {},
+                    onTap: () async {
+                      videoPath = await VideoService().videoFromCamera();
+                      await videoProvider.setVideoPath(videoPath!, true);
+
+                      setState(() {});
+                    },
                   ),
                 ],
               ),
+              const SizedBox(height: 8),
+              videoPath!.isEmpty && videoProvider.isVideoLoading
+                  ? const SizedBox()
+                  : AspectRatio(
+                      aspectRatio:
+                          videoProvider.videoPlayerController.value.aspectRatio,
+                      child: VideoPlayer(videoProvider.videoPlayerController),
+                    ),
               const SizedBox(height: 8),
             ],
           );
@@ -240,12 +295,12 @@ class _AddNotesState extends State<AddNotes> {
           optionWidget = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               const Text(
                 'Add Images Note Here',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Row(
                 children: [
                   CommonButton(
@@ -253,19 +308,46 @@ class _AddNotesState extends State<AddNotes> {
                     text: "From Gallery",
                     onTap: () async {
                       _selectedImages = await ImagePickerService().pickImages();
+                      setState(() {});
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   CommonButton(
                     icon: Icons.camera_alt,
                     text: "From Camera",
                     onTap: () async {
-                      _selectedImages = await ImagePickerService().pickImages();
+                      _selectedImages =
+                          await ImagePickerService().pickImagesFromCamera();
+                      setState(() {});
                     },
                   ),
                 ],
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 180,
+                child: ListView.separated(
+                  itemCount: _selectedImages?.length ?? 0,
+                  separatorBuilder: (context, index) => SizedBox(
+                    width: 10,
+                  ),
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        height: 150,
+                        width: 200,
+                        child: Image.file(
+                          File(_selectedImages![index].path),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
               const SizedBox(height: 8),
             ],
@@ -275,7 +357,7 @@ class _AddNotesState extends State<AddNotes> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: const [
               // SizedBox(height: 16),
-              const Text(
+              Text(
                 'Add Text Note Here',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
