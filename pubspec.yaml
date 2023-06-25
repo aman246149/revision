@@ -31,6 +31,8 @@ dependencies:
   flutter_animate: ^4.1.1+1
   video_player: ^2.6.1
   url_launcher: ^6.1.11
+  image_picker: ^0.8.4+4
+  file_picker: ^4.3.0
   
 
 dev_dependencies:
