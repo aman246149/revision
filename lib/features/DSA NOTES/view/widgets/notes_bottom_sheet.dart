@@ -1,10 +1,8 @@
-import 'dart:math';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:dsanotes/providers/video_provider.dart';
 import 'package:dsanotes/services/url_launcher_service.dart';
 import 'package:flutter/material.dart';
-import 'package:animated_icon/animated_icon.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -115,7 +113,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                       },
                       child: Container(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                            const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                         decoration: BoxDecoration(
                             color: Theme.of(context).primaryColorLight,
                             border: Border.all(),
@@ -141,7 +139,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )
-                : Container(
+                : SizedBox(
                     height: customHeight,
                     width: double.infinity,
                     child: Center(

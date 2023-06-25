@@ -37,19 +37,19 @@ class _NotesViewState extends State<NotesView> {
     final audioProvider = context.read<AudioProvider>();
     final audioProviderWatch = context.watch<AudioProvider>();
     return Scaffold(
-      appBar: CommonAppBar(text: "My Notes"),
+      appBar: const CommonAppBar(text: "My Notes"),
       body: audioProviderWatch.isLoading
           ? const Center(
               child: CircularProgressIndicator(),
             )
           : Column(
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 50,
                   width: double.infinity,
                   child: FilterList(),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Expanded(
@@ -135,10 +135,10 @@ class _NotesViewState extends State<NotesView> {
           Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => AddNotes(),
+                builder: (context) => const AddNotes(),
               ));
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

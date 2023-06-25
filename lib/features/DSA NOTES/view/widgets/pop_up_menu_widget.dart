@@ -9,11 +9,11 @@ void showPopupMenu(
     position: RelativeRect.fromLTRB(left, top, left + 1, top + 1),
     items: [
       PopupMenuItem<String>(
-        child: const Text('Delete'),
         value: 'Delete',
         onTap: () {
           onTap();
         },
+        child: const Text('Delete'),
       ),
     ],
     elevation: 8.0,

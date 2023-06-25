@@ -1,6 +1,5 @@
 import "package:dsanotes/features/DSA%20NOTES/view/widgets/pop_up_menu_widget.dart";
 import "package:flutter/material.dart";
-import "package:intl/intl.dart";
 
 import "../../../../services/hive_adapters/notes.dart";
 
@@ -37,7 +36,7 @@ class NotesWidget extends StatelessWidget {
           onTapDown: (TapDownDetails details) {
             showPopupMenu(context, details.globalPosition,onDelete);
           },
-          child: Icon(Icons.more_vert)),
+          child: const Icon(Icons.more_vert)),
     );
   }
 }

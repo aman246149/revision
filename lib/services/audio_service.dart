@@ -1,11 +1,8 @@
 import 'dart:async';
 import 'package:audio_session/audio_session.dart';
-import 'package:dsanotes/services/database_service.dart';
-import 'package:dsanotes/services/hive_adapters/notes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_sound_platform_interface/flutter_sound_recorder_platform_interface.dart';
-import 'package:get_it/get_it.dart';
 import 'package:injectable/injectable.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';

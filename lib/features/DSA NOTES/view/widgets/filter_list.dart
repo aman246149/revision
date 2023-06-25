@@ -13,7 +13,7 @@ class FilterList extends StatelessWidget {
   Widget build(BuildContext context) {
     final audioProvider = context.watch<AudioProvider>();
     return ListView.separated(
-        padding: EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 20),
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
           return UnconstrainedBox(
@@ -22,7 +22,7 @@ class FilterList extends StatelessWidget {
                 audioProvider.selectFilterIndex(index);
               },
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                 decoration: BoxDecoration(
                     color: audioProvider.selectedFilterIndex == index
                         ? Theme.of(context).primaryColorLight
@@ -35,7 +35,7 @@ class FilterList extends StatelessWidget {
             ),
           );
         },
-        separatorBuilder: (context, index) => SizedBox(
+        separatorBuilder: (context, index) => const SizedBox(
               width: 12,
             ),
         itemCount: audioProvider.filters.length);

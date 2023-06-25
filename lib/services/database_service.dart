@@ -20,7 +20,7 @@ class DataBaseService<T> {
     if (box == null) {
       throw Exception('Box is not opened');
     }
-    return await box!.get(key);
+    return box!.get(key);
   }
 
   Future<List<T>> getAllData() async {
