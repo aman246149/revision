@@ -16,7 +16,7 @@ import 'features/DSA NOTES/view/screens/notes.dart';
 void main() async {
   await configureDependencies();
   await Hive.initFlutter();
-  Hive.registerAdapter(NotesAdapter()); // Register the NotesAdapter
+  Hive.registerAdapter(NotesHiveAdapter()); // Register the NotesAdapter
   await GetIt.I<DataBaseService>().openBox('sound_box');
   runApp(const MainApp());
 }

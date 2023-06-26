@@ -1,4 +1,5 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:dsanotes/features/DSA%20NOTES/model/notes_model.dart';
 import 'package:dsanotes/providers/video_provider.dart';
 import 'package:dsanotes/services/url_launcher_service.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class CustomBottomSheet extends StatefulWidget {
 
   final AudioProvider audioProvider;
   final int index;
-  final Notes notes;
+  final NotesModel notes;
 
   @override
   State<CustomBottomSheet> createState() => _CustomBottomSheetState();
@@ -72,7 +73,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            widget.notes.fileName ?? "",
+            widget.notes.noteTitle ?? "",
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   fontSize: 20,
                   fontWeight: FontWeight.w800,

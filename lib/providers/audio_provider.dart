@@ -8,6 +8,7 @@ import 'package:flutter_sound/public/flutter_sound_player.dart';
 import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:get_it/get_it.dart';
 
+import '../features/DSA NOTES/model/notes_model.dart';
 import '../services/audio_service.dart';
 
 typedef VoidCallback = void Function();
@@ -22,9 +23,9 @@ class AudioProvider extends ChangeNotifier {
   bool get isPlaybackReady => _audioService.isPlaybackReady;
   bool get isPlayerInited => _audioService.isPlayerInited;
   bool get isLoading => _isLoading;
-  List<Notes> get recordingList => _recordingList;
+  List<NotesModel> get recordingList => _recordingList;
 
-  List<Notes> _recordingList = [];
+  List<NotesModel> _recordingList = [];
   FlutterSoundPlayer? get player => _audioService.player;
   FlutterSoundRecorder? get recorder => _audioService.recorder;
   bool _isLoading = false;
@@ -52,11 +53,10 @@ class AudioProvider extends ChangeNotifier {
   Future<void> _record() async {
     await _audioService.record(
       (audioPath) async {
-        var notes = Notes()
-          ..filePath = audioPath
-          ..fileName =
+        var notes = NotesHive()
+          ..audioPath = audioPath
+          ..noteTitle =
               'Find two sum in a sorted array using two pointer approach'
-          ..topicName = 'Example Topic'
           ..dateTime = DateTime.now();
         // Store the file path in the database
         await GetIt.I<DataBaseService>()
@@ -78,7 +78,7 @@ class AudioProvider extends ChangeNotifier {
       if (soundBytesString != null) {
         // Sound bytes string retrieved successfully
         // Use the sound bytes string as needed
-        _audioService.setAudioPath(soundBytesString.filePath!);
+        _audioService.setAudioPath(soundBytesString.audioPath!);
       } else {
         print("error sound corrputed");
         return;
@@ -134,11 +134,23 @@ class AudioProvider extends ChangeNotifier {
 
       List<dynamic> keys = await _dataBaseService.getAllDataKeys();
       for (var key in keys) {
-        var notes = await _dataBaseService.getBox(key) as Notes?;
+        var notes = await _dataBaseService.getBox(key) as NotesHive?;
         if (notes != null) {
           notes.key = key;
-          _recordingList.add(notes);
-          filters.add(notes.topicName ?? "");
+          NotesModel notesModel = NotesModel(
+              audioPath: notes.audioPath,
+              dateTime: notes.dateTime,
+              key: notes.key,
+              noteTitle: notes.noteTitle,
+              noteTypes: notes.noteTypes,
+              references: notes.references,
+              selectedImages: notes.selectedImages,
+              tagName: notes.tagName,
+              textNote: notes.textNote,
+              videoPath: notes.videoPath);
+          _recordingList.add(notesModel);
+          //!add tag here
+          notes.tagName?.map((e) => filters.add(e));
         }
       }
 

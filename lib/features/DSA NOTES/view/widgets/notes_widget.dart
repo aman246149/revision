@@ -2,15 +2,17 @@ import "package:dsanotes/features/DSA%20NOTES/view/widgets/pop_up_menu_widget.da
 import "package:flutter/material.dart";
 
 import "../../../../services/hive_adapters/notes.dart";
+import "../../model/notes_model.dart";
 
 class NotesWidget extends StatelessWidget {
   const NotesWidget({
     super.key,
     required this.notes,
     required this.index,
-    required this.onTap, required this.onDelete,
+    required this.onTap,
+    required this.onDelete,
   });
-  final Notes notes;
+  final NotesModel notes;
   final int index;
   final Function() onTap;
   final Function() onDelete;
@@ -21,20 +23,20 @@ class NotesWidget extends StatelessWidget {
       leading: Image.network(
           "https://media.geeksforgeeks.org/wp-content/cdn-uploads/graph.png"),
       title: Text(
-        notes.fileName ?? "",
+        notes.noteTitle ?? "",
         style: Theme.of(context)
             .textTheme
             .bodyMedium!
             .copyWith(fontSize: 20, fontWeight: FontWeight.w800),
       ),
-      subtitle: Text(notes.topicName ?? "",
+      subtitle: Text(notes.tagName?.join() ?? "",
           style: Theme.of(context)
               .textTheme
               .bodyMedium!
               .copyWith(fontSize: 15, fontWeight: FontWeight.w400)),
       trailing: GestureDetector(
           onTapDown: (TapDownDetails details) {
-            showPopupMenu(context, details.globalPosition,onDelete);
+            showPopupMenu(context, details.globalPosition, onDelete);
           },
           child: const Icon(Icons.more_vert)),
     );
