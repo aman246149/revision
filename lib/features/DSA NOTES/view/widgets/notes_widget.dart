@@ -29,7 +29,7 @@ class NotesWidget extends StatelessWidget {
             .bodyMedium!
             .copyWith(fontSize: 20, fontWeight: FontWeight.w800),
       ),
-      subtitle: Text(notes.tagName?.join() ?? "",
+      subtitle: Text(notes.tagName?.join(", ") ?? "",
           style: Theme.of(context)
               .textTheme
               .bodyMedium!

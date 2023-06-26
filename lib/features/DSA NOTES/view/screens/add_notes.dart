@@ -38,11 +38,12 @@ class _AddNotesState extends State<AddNotes> {
   String? videoPath = "";
   final kHintStyle = const TextStyle(color: Colors.grey, fontSize: 14);
   Color color = Colors.red;
-  
+
   @override
   void initState() {
     super.initState();
     _selectedOptions.add(NoteOption.Text);
+    
   }
 
   @override
