@@ -19,7 +19,9 @@ class VideoProvider extends ChangeNotifier {
   }
 
   void closeVideoPlayer() {
-    isVideoLoading = true;
-    _videoService.stop();
+    if (isVideoLoading == false) {
+      isVideoLoading = true;
+      _videoService.stop();
+    }
   }
 }

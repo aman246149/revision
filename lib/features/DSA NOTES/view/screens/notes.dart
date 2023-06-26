@@ -42,62 +42,75 @@ class _NotesViewState extends State<NotesView> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : Column(
-              children: [
-                const SizedBox(
-                  height: 50,
-                  width: double.infinity,
-                  child: FilterList(),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Expanded(
-                  child: ListView.separated(
-                    itemCount: audioProviderWatch.recordingList.length,
-                    separatorBuilder: (context, index) => const Divider(
-                      height: 20,
-                      thickness: 0.5,
+          : audioProviderWatch.recordingList.isEmpty
+              ? const Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    child: Text(
+                      "Ops,Seems You Don't Have Any Notes Add New Notes",
+                      textAlign: TextAlign.center,
                     ),
-                    itemBuilder: (context, index) {
-                      return NotesWidget(
-                        notes: audioProvider.recordingList[index],
-                        index: index,
-                        onTap: () async {
-                          await showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            backgroundColor: Colors.transparent,
-                            builder: (_) => Container(
-                              height: MediaQuery.of(context).size.height * 0.92,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(25.0),
-                                  topRight: Radius.circular(25.0),
-                                ),
-                              ),
-                              child: CustomBottomSheet(
-                                audioProvider: audioProvider,
-                                index: index,
-                                notes: audioProvider.recordingList[index],
-                              ),
-                            ),
-                          ).whenComplete(() {
-                            audioProvider.cancelAllSubscriptions();
-                            context.read<VideoProvider>().closeVideoPlayer();
-                          });
-                        },
-                        onDelete: () {
-                          audioProvider.deleteNotes(
-                              audioProvider.recordingList[index].key!);
-                        },
-                      );
-                    },
                   ),
+                )
+              : Column(
+                  children: [
+                    const SizedBox(
+                      height: 50,
+                      width: double.infinity,
+                      child: FilterList(),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Expanded(
+                      child: ListView.separated(
+                        itemCount: audioProviderWatch.recordingList.length,
+                        separatorBuilder: (context, index) => const Divider(
+                          height: 20,
+                          thickness: 0.5,
+                        ),
+                        itemBuilder: (context, index) {
+                          return NotesWidget(
+                            notes: audioProvider.recordingList[index],
+                            index: index,
+                            onTap: () async {
+                              await showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                builder: (_) => Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.92,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(25.0),
+                                      topRight: Radius.circular(25.0),
+                                    ),
+                                  ),
+                                  child: CustomBottomSheet(
+                                    audioProvider: audioProvider,
+                                    index: index,
+                                    notes: audioProvider.recordingList[index],
+                                  ),
+                                ),
+                              ).whenComplete(() {
+                                audioProvider.cancelAllSubscriptions();
+                                context
+                                    .read<VideoProvider>()
+                                    .closeVideoPlayer();
+                              });
+                            },
+                            onDelete: () {
+                              audioProvider.deleteNotes(
+                                  audioProvider.recordingList[index].key!);
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
