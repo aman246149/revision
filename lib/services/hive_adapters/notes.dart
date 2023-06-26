@@ -17,5 +17,5 @@ class Notes {
   DateTime? dateTime;
 
   String? key;
-  bool isCurrentlyPlaying = false;
+ 
 }
