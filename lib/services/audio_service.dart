@@ -107,7 +107,7 @@ class AudioService {
       );
 
       // Delay for 1 second to ensure recording has started
-      await Future.delayed(const Duration(seconds: 1));
+      await Future.delayed(const Duration(milliseconds: 200));
 
       // Check the recording status periodically
       Timer.periodic(const Duration(milliseconds: 200), (Timer timer) async {

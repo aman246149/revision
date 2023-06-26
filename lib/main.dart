@@ -39,6 +39,7 @@ class MainApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: ThemeData.light(useMaterial3: true),
         home: const NotesView(),
       ),

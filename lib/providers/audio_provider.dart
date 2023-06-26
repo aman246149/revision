@@ -101,12 +101,13 @@ class AudioProvider extends ChangeNotifier {
       print("start stop");
       recorder!.isStopped ? await _record() : await _stopRecorder();
       if (recorder!.isStopped) {
-        Future.delayed(
-          const Duration(seconds: 1),
-          () {
-            getListAllRecordingNotes();
-          },
-        );
+        getListAllRecordingNotes();
+        // Future.delayed(
+        //   const Duration(milliseconds: 500),
+        //   () {
+
+        //   },
+        // );
       }
       notifyListeners();
     } catch (e) {

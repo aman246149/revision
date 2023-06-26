@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:dsanotes/providers/video_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -37,6 +38,7 @@ class _AddNotesState extends State<AddNotes> {
   String? videoPath = "";
   final kHintStyle = const TextStyle(color: Colors.grey, fontSize: 14);
   Color color = Colors.red;
+  
   @override
   void initState() {
     super.initState();
@@ -204,6 +206,7 @@ class _AddNotesState extends State<AddNotes> {
   }
 
   Widget _buildSelectedOptionFields() {
+    bool isStartRecording = false;
     final audioProvider = context.read<AudioProvider>();
     final audioProviderWatch = context.watch<AudioProvider>();
     final videoProvider = context.read<VideoProvider>();
@@ -225,8 +228,8 @@ class _AddNotesState extends State<AddNotes> {
                   CommonButton(
                     icon: Icons.record_voice_over,
                     text: audioProviderWatch.recorder!.isRecording
-                        ? "Stop audio"
-                        : "Record audio",
+                        ? "Stop Recording"
+                        : "Start Record",
                     onTap: () async {
                       audioProvider.startStopRecorder();
                     },
@@ -242,6 +245,7 @@ class _AddNotesState extends State<AddNotes> {
                     onTap: () async {
                       audioProvider.startStopPlayer();
                     },
+                    isVisible: !audioProviderWatch.recorder!.isRecording,
                   ),
                 ],
               ),
@@ -428,24 +432,28 @@ class _AddNotesState extends State<AddNotes> {
 }
 
 class CommonButton extends StatelessWidget {
-  const CommonButton({
-    super.key,
-    required this.onTap,
-    required this.text,
-    required this.icon,
-  });
+  const CommonButton(
+      {super.key,
+      required this.onTap,
+      required this.text,
+      required this.icon,
+      this.isVisible = true});
   final Function() onTap;
   final String text;
   final IconData icon;
+  final bool isVisible;
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: ElevatedButton.icon(
-        onPressed: () {
-          onTap();
-        },
-        label: Text(text),
-        icon: Icon(icon),
+    return Visibility(
+      visible: isVisible,
+      child: Expanded(
+        child: ElevatedButton.icon(
+          onPressed: () {
+            onTap();
+          },
+          label: Text(text),
+          icon: Icon(icon),
+        ).animate().shimmer(),
       ),
     );
   }

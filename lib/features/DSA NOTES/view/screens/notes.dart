@@ -32,6 +32,15 @@ class _NotesViewState extends State<NotesView> {
     await context.read<AudioProvider>().getListAllRecordingNotes();
   }
 
+  Widget makeDismissible({required Widget child}) => GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () => Navigator.of(context).pop(),
+        child: GestureDetector(
+          onTap: () {},
+          child: child,
+        ),
+      );
+
   @override
   Widget build(BuildContext context) {
     final audioProvider = context.read<AudioProvider>();
@@ -47,7 +56,7 @@ class _NotesViewState extends State<NotesView> {
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 20),
                     child: Text(
-                      "Ops,Seems You Don't Have Any Notes Add New Notes",
+                      "Oops,Seems You Don't Have Any Notes,Please Add New Notes",
                       textAlign: TextAlign.center,
                     ),
                   ),
@@ -78,20 +87,31 @@ class _NotesViewState extends State<NotesView> {
                                 context: context,
                                 isScrollControlled: true,
                                 backgroundColor: Colors.transparent,
-                                builder: (_) => Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.92,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(25.0),
-                                      topRight: Radius.circular(25.0),
-                                    ),
-                                  ),
-                                  child: CustomBottomSheet(
-                                    audioProvider: audioProvider,
-                                    index: index,
-                                    notes: audioProvider.recordingList[index],
+                                builder: (_) => makeDismissible(
+                                  child: DraggableScrollableSheet(
+                                    initialChildSize: 0.6,
+                                    maxChildSize: 1,
+                                    minChildSize: 0.2,
+                                    snap: false,
+                                    builder: (context, scrollController) {
+                                      return Container(
+                                        padding: const EdgeInsets.all(20),
+                                        decoration: const BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(25.0),
+                                            topRight: Radius.circular(25.0),
+                                          ),
+                                        ),
+                                        child: CustomBottomSheet(
+                                          audioProvider: audioProvider,
+                                          controller: scrollController,
+                                          index: index,
+                                          notes: audioProvider
+                                              .recordingList[index],
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                               ).whenComplete(() {
