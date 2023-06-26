@@ -57,7 +57,9 @@ class AudioProvider extends ChangeNotifier {
           ..audioPath = audioPath
           ..noteTitle =
               'Find two sum in a sorted array using two pointer approach'
+          ..tagName = ["Graph,Array"]
           ..dateTime = DateTime.now();
+
         // Store the file path in the database
         await GetIt.I<DataBaseService>()
             .putBox(notes.dateTime.toString(), notes);
@@ -102,12 +104,10 @@ class AudioProvider extends ChangeNotifier {
       recorder!.isStopped ? await _record() : await _stopRecorder();
       if (recorder!.isStopped) {
         getListAllRecordingNotes();
-        // Future.delayed(
-        //   const Duration(milliseconds: 500),
-        //   () {
-
-        //   },
-        // );
+        Future.delayed(
+          const Duration(milliseconds: 500),
+          () {},
+        );
       }
       notifyListeners();
     } catch (e) {
