@@ -34,6 +34,7 @@ class AudioProvider extends ChangeNotifier {
   String _currentPlayingRecording = "";
   Set<String> filters = {};
   int selectedFilterIndex = 0;
+  String audioPathFromRecorder = "";
 
   StreamController<Duration>? duration = StreamController.broadcast();
   StreamController<Duration>? position = StreamController.broadcast();
@@ -53,17 +54,7 @@ class AudioProvider extends ChangeNotifier {
   Future<void> _record() async {
     await _audioService.record(
       (audioPath) async {
-        var notes = NotesHive()
-          ..audioPath = audioPath
-          ..noteTitle =
-              'Find two sum in a sorted array using two pointer approach'
-          ..tagName = ["Graph", "Array"]
-          ..dateTime = DateTime.now();
-
-        // Store the file path in the database
-        await GetIt.I<DataBaseService>()
-            .putBox(notes.dateTime.toString(), notes);
-        getListAllRecordingNotes();
+        audioPathFromRecorder = audioPath;
       },
     );
     notifyListeners();

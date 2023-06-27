@@ -1,8 +1,8 @@
 import 'package:image_picker/image_picker.dart';
 
 class ImagePickerService {
-  Future<List<XFile>> pickImages() async {
-    List<XFile> images = [];
+  Future<List<String>> pickImages() async {
+    List<String> images = [];
 
     try {
       List<XFile>? pickedImages = await ImagePicker().pickMultiImage(
@@ -12,7 +12,7 @@ class ImagePickerService {
       );
 
       if (pickedImages != null) {
-        images.addAll(pickedImages);
+        images = pickedImages.map((image) => image.path).toList();
       }
     } catch (e) {
       // Handle the exception
@@ -22,15 +22,15 @@ class ImagePickerService {
     return images;
   }
 
-  Future<List<XFile>> pickImagesFromCamera() async {
-    List<XFile>? images = [];
+  Future<List<String>> pickImagesFromCamera() async {
+    List<String> images = [];
 
     try {
-      XFile? pickedImages =
+      XFile? pickedImage =
           await ImagePicker().pickImage(source: ImageSource.camera);
 
-      if (pickedImages != null) {
-        images.add(pickedImages);
+      if (pickedImage != null) {
+        images.add(pickedImage.path);
       }
     } catch (e) {
       // Handle the exception

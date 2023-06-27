@@ -17,6 +17,7 @@ void main() async {
   await configureDependencies();
   await Hive.initFlutter();
   Hive.registerAdapter(NotesHiveAdapter()); // Register the NotesAdapter
+  Hive.registerAdapter(NoteOptionAdapter()); // Register the NotesAdapter
   await GetIt.I<DataBaseService>().openBox('sound_box');
   runApp(const MainApp());
 }

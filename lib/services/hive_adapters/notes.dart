@@ -1,7 +1,5 @@
 import 'package:hive_flutter/adapters.dart';
 
-import '../../features/DSA NOTES/view/screens/add_notes.dart';
-
 part 'notes.g.dart';
 
 @HiveType(typeId: 1)
@@ -34,4 +32,19 @@ class NotesHive {
   DateTime? dateTime;
 
   String? key;
+}
+
+@HiveType(typeId: 2)
+enum NoteOption {
+  @HiveField(0)
+  Audio,
+
+  @HiveField(1)
+  Video,
+
+  @HiveField(2)
+  Images,
+
+  @HiveField(3)
+  Text,
 }

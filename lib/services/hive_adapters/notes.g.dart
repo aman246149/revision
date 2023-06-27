@@ -62,3 +62,52 @@ class NotesHiveAdapter extends TypeAdapter<NotesHive> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+class NoteOptionAdapter extends TypeAdapter<NoteOption> {
+  @override
+  final int typeId = 2;
+
+  @override
+  NoteOption read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return NoteOption.Audio;
+      case 1:
+        return NoteOption.Video;
+      case 2:
+        return NoteOption.Images;
+      case 3:
+        return NoteOption.Text;
+      default:
+        return NoteOption.Audio;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, NoteOption obj) {
+    switch (obj) {
+      case NoteOption.Audio:
+        writer.writeByte(0);
+        break;
+      case NoteOption.Video:
+        writer.writeByte(1);
+        break;
+      case NoteOption.Images:
+        writer.writeByte(2);
+        break;
+      case NoteOption.Text:
+        writer.writeByte(3);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is NoteOptionAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}

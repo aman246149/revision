@@ -3,21 +3,17 @@
 import 'dart:io';
 
 import 'package:dsanotes/providers/video_provider.dart';
+import 'package:dsanotes/services/hive_adapters/notes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 import '../../../../providers/audio_provider.dart';
+import '../../../../services/database_service.dart';
 import '../../../../services/get_video_service.dart';
 import '../../../../services/image_picker_service.dart';
-
-enum NoteOption {
-  Audio,
-  Video,
-  Images,
-  Text,
-}
 
 class AddNotes extends StatefulWidget {
   const AddNotes({Key? key}) : super(key: key);
@@ -30,20 +26,52 @@ class _AddNotesState extends State<AddNotes> {
   final TextEditingController _questionTitleController =
       TextEditingController();
   final TextEditingController _tagController = TextEditingController();
+  final TextEditingController _textNoteController = TextEditingController();
   final TextEditingController _referenceController = TextEditingController();
   final List<String> _tags = [];
   final List<String> _references = [];
   final List<NoteOption> _selectedOptions = [];
-  List<XFile>? _selectedImages = [];
+  List<String>? _selectedImages = [];
   String? videoPath = "";
   final kHintStyle = const TextStyle(color: Colors.grey, fontSize: 14);
   Color color = Colors.red;
+  bool loader = false;
 
   @override
   void initState() {
     super.initState();
     _selectedOptions.add(NoteOption.Text);
-    
+  }
+
+  void saveToDatabase() async {
+    final audioProvider = context.read<AudioProvider>();
+    setState(() {
+      loader = true;
+    });
+
+    if (audioProvider.recorder!.isRecording) {
+      audioProvider.recorder!.stopRecorder();
+      await Future.delayed(Duration(seconds: 1));
+    }
+
+    var notes = NotesHive()
+      ..audioPath = context.read<AudioProvider>().audioPathFromRecorder
+      ..noteTitle = _questionTitleController.text
+      ..noteTypes = _selectedOptions
+      ..references = _references
+      ..selectedImages = _selectedImages
+      ..textNote = _textNoteController.text
+      ..videoPath = videoPath
+      ..tagName = _tags
+      ..dateTime = DateTime.now();
+
+    await GetIt.I<DataBaseService>().putBox(notes.dateTime.toString(), notes);
+    await audioProvider.getListAllRecordingNotes();
+    final snackBar = SnackBar(content: Text('Successfully saved'));
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    setState(() {
+      loader = false;
+    });
   }
 
   @override
@@ -179,9 +207,15 @@ class _AddNotesState extends State<AddNotes> {
                       borderRadius: BorderRadius.circular(20))),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                child: const Text("SAVE"),
+                child: loader
+                    ? IntrinsicHeight(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : const Text("SAVE"),
               ),
-              onPressed: () {},
+              onPressed: () => saveToDatabase(),
             ),
           )),
     );
@@ -352,7 +386,7 @@ class _AddNotesState extends State<AddNotes> {
                               height: 150,
                               width: 200,
                               child: Image.file(
-                                File(_selectedImages![index].path),
+                                File(_selectedImages![index]),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -366,7 +400,7 @@ class _AddNotesState extends State<AddNotes> {
         } else if (option == NoteOption.Text) {
           optionWidget = Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               // SizedBox(height: 16),
               Text(
                 'Add Text Note Here',
@@ -374,6 +408,7 @@ class _AddNotesState extends State<AddNotes> {
               ),
               SizedBox(height: 16),
               TextField(
+                controller: _textNoteController,
                 maxLines: 5,
                 decoration: InputDecoration(
                   hintText: 'Write Notes ....',
