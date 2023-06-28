@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:dsanotes/features/DSA%20NOTES/model/notes_model.dart';
 import 'package:dsanotes/providers/video_provider.dart';
@@ -78,18 +80,12 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
         Text(
           widget.notes.noteTitle ?? "",
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontSize: 20,
+                fontSize: 24,
                 fontWeight: FontWeight.w800,
               ),
         ),
-        Container(
-          margin: const EdgeInsets.symmetric(vertical: 12),
-          height: 200,
-          width: double.maxFinite,
-          child: Image.network(
-            "https://media.geeksforgeeks.org/wp-content/cdn-uploads/graph.png",
-            fit: BoxFit.contain,
-          ),
+        SizedBox(
+          height: 15,
         ),
         Text(
           widget.notes.textNote ?? "",
@@ -99,6 +95,45 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
               ),
         ),
         const SizedBox(height: 12),
+        Text(
+          "Your Images Notes",
+          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                fontSize: 20,
+                fontWeight: FontWeight.w800,
+              ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        widget.notes.selectedImages!.isEmpty
+            ? const SizedBox()
+            : SizedBox(
+                height: 180,
+                child: ListView.separated(
+                  itemCount: widget.notes.selectedImages?.length ?? 0,
+                  separatorBuilder: (context, index) => SizedBox(
+                    width: 10,
+                  ),
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Container(
+                        height: 150,
+                        width: 200,
+                        child: Image.file(
+                          File(widget.notes.selectedImages![index]),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+        SizedBox(
+          height: 20,
+        ),
+
         Text(
           "References",
           style: Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -234,6 +269,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                   widget.audioProvider.startStopPlayer();
                   setState(() {});
                 },
+                isVisible: widget.audioProvider.player!.isStopped,
               ),
               const SizedBox(
                 width: 10,
@@ -247,7 +283,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                   }
                   setState(() {});
                 },
-                isVisible: true,
+                isVisible: widget.audioProvider.player!.isStopped == false,
               ),
             ],
           ),

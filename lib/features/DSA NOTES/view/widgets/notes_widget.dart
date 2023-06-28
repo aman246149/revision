@@ -1,3 +1,5 @@
+import "dart:io";
+
 import "package:dsanotes/features/DSA%20NOTES/view/widgets/pop_up_menu_widget.dart";
 import "package:flutter/material.dart";
 
@@ -20,8 +22,12 @@ class NotesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () => onTap(),
-      leading: Image.network(
-          "https://media.geeksforgeeks.org/wp-content/cdn-uploads/graph.png"),
+      leading: Image.file(
+        File(notes.selectedImages?[0] ?? ""),
+        width: 80,
+        height: 80,
+        fit: BoxFit.cover,
+      ),
       title: Text(
         notes.noteTitle ?? "",
         style: Theme.of(context)
