@@ -99,11 +99,8 @@ class _NotesViewState extends State<NotesView> {
                                       return Container(
                                         padding: const EdgeInsets.all(20),
                                         decoration: BoxDecoration(
-                                          color: context
-                                                  .watch<ThemeProvider>()
-                                                  .lightTheme
-                                              ? Colors.white
-                                              : Colors.black,
+                                          color: Theme.of(context)
+                                              .scaffoldBackgroundColor,
                                           borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(25.0),
                                             topRight: Radius.circular(25.0),

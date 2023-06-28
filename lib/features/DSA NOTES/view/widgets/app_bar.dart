@@ -14,17 +14,8 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(
         text,
-       
       ),
-      actions: [
-        IconButton(
-            onPressed: () {
-              context.read<ThemeProvider>().switchCurrentTheme();
-            },
-            icon: context.watch<ThemeProvider>().lightTheme
-                ? Icon(Icons.brightness_4)
-                : Icon(Icons.brightness_2))
-      ],
+      actions: [],
     );
   }
 
