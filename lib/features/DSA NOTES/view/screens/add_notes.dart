@@ -209,7 +209,11 @@ class _AddNotesState extends State<AddNotes> {
                           child: CircularProgressIndicator(),
                         ),
                       )
-                    : const Text("SAVE"),
+                    : Text(
+                        "SAVE",
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.bold, fontSize: 18),
+                      ),
               ),
               onPressed: () => saveToDatabase(),
             ),
