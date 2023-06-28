@@ -1,5 +1,4 @@
 import 'package:dsanotes/providers/theme_provider.dart';
-import 'package:dsanotes/theme/custom_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +14,7 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(
         text,
+       
       ),
       actions: [
         IconButton(

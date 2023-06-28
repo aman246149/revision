@@ -1,5 +1,7 @@
 import 'package:dsanotes/features/DSA%20NOTES/view/screens/add_notes.dart';
+import 'package:dsanotes/providers/theme_provider.dart';
 import 'package:dsanotes/providers/video_provider.dart';
+import 'package:dsanotes/theme/custom_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -96,8 +98,12 @@ class _NotesViewState extends State<NotesView> {
                                     builder: (context, scrollController) {
                                       return Container(
                                         padding: const EdgeInsets.all(20),
-                                        decoration: const BoxDecoration(
-                                          color: Colors.white,
+                                        decoration: BoxDecoration(
+                                          color: context
+                                                  .watch<ThemeProvider>()
+                                                  .lightTheme
+                                              ? Colors.white
+                                              : Colors.black,
                                           borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(25.0),
                                             topRight: Radius.circular(25.0),

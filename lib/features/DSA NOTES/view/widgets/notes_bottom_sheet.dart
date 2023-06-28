@@ -185,7 +185,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                                             ? Icons.fullscreen_exit
                                             : Icons.fullscreen,
                                         size: 30,
-                                        color: Colors.white,
+                                        // color: Colors.white,
                                       ),
                                     ),
                                   ),
@@ -199,7 +199,7 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                                               ? Icons.pause
                                               : Icons.play_arrow,
                                           size: 50,
-                                          color: Colors.white,
+                                          // color: Colors.white,
                                         ),
                                       ),
                                     ),
