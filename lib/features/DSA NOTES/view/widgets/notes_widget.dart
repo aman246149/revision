@@ -2,6 +2,7 @@ import "dart:io";
 
 import "package:dsanotes/features/DSA%20NOTES/view/widgets/pop_up_menu_widget.dart";
 import "package:flutter/material.dart";
+import "package:intl/intl.dart";
 
 import "../../../../services/hive_adapters/notes.dart";
 import "../../model/notes_model.dart";
@@ -22,12 +23,14 @@ class NotesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: () => onTap(),
-      leading: Image.file(
-        File(notes.selectedImages?[0] ?? ""),
-        width: 80,
-        height: 80,
-        fit: BoxFit.cover,
-      ),
+      leading: notes.selectedImages == null || notes.selectedImages!.isEmpty
+          ? SizedBox()
+          : Image.file(
+              File(notes.selectedImages?[0] ?? ""),
+              width: 80,
+              height: 80,
+              fit: BoxFit.cover,
+            ),
       title: Text(
         notes.noteTitle ?? "",
         style: Theme.of(context)

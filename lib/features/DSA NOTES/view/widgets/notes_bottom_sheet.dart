@@ -94,80 +94,87 @@ class _CustomBottomSheetState extends State<CustomBottomSheet> {
                 fontWeight: FontWeight.w400,
               ),
         ),
-        const SizedBox(height: 12),
-        Text(
-          "Your Images Notes",
-          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-              ),
-        ),
-        SizedBox(
-          height: 15,
-        ),
-        widget.notes.selectedImages!.isEmpty
-            ? const SizedBox()
-            : SizedBox(
-                height: 180,
-                child: ListView.separated(
-                  itemCount: widget.notes.selectedImages?.length ?? 0,
-                  separatorBuilder: (context, index) => SizedBox(
-                    width: 10,
-                  ),
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        height: 150,
-                        width: 200,
-                        child: Image.file(
-                          File(widget.notes.selectedImages![index]),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    );
-                  },
+        const SizedBox(height: 16),
+        if (widget.notes.selectedImages != null &&
+            widget.notes.selectedImages!.isNotEmpty) ...[
+          Text(
+            "Your Images Notes",
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
                 ),
+          ),
+          SizedBox(
+            height: 15,
+          ),
+          SizedBox(
+            height: 180,
+            child: ListView.separated(
+              itemCount: widget.notes.selectedImages?.length ?? 0,
+              separatorBuilder: (context, index) => SizedBox(
+                width: 10,
               ),
-        SizedBox(
-          height: 20,
-        ),
-
-        Text(
-          "References",
-          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-              ),
-        ),
-        const SizedBox(height: 12),
-        Wrap(
-          spacing: 15,
-          runSpacing: 15,
-          children: widget.notes.references!
-              .map((e) => GestureDetector(
-                    onTap: () {
-                      canlaunchUrl(e);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 5),
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColorLight,
-                          border: Border.all(),
-                          borderRadius: BorderRadius.circular(20)),
-                      child: Center(
-                          child: Text(
-                        e,
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      )),
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Container(
+                    height: 150,
+                    width: 200,
+                    child: Image.file(
+                      File(widget.notes.selectedImages![index]),
+                      fit: BoxFit.cover,
                     ),
-                  ))
-              .toList(),
-        ),
-        const SizedBox(height: 12),
+                  ),
+                );
+              },
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+        ],
+
+        if (widget.notes.references != null &&
+            widget.notes.references!.isNotEmpty) ...[
+          Text(
+            "References",
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w800,
+                ),
+          ),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 15,
+            runSpacing: 15,
+            children: widget.notes.references!
+                .map((e) => GestureDetector(
+                      onTap: () {
+                        canlaunchUrl(e);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 5),
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColorLight,
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(20)),
+                        child: Center(
+                            child: Text(
+                          e,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(
+                                  fontSize: 15, fontWeight: FontWeight.bold),
+                        )),
+                      ),
+                    ))
+                .toList(),
+          ),
+          const SizedBox(height: 12),
+        ],
         //!If video notes required
         if (widget.notes.videoPath != null &&
             widget.notes.videoPath!.isNotEmpty) ...[
