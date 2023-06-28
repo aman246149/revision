@@ -1,4 +1,5 @@
 import 'package:dsanotes/providers/audio_provider.dart';
+import 'package:dsanotes/providers/theme_provider.dart';
 import 'package:dsanotes/providers/video_provider.dart';
 import 'package:dsanotes/services/audio_service.dart';
 import 'package:dsanotes/services/database_service.dart';
@@ -37,13 +38,18 @@ class MainApp extends StatelessWidget {
           create: (context) => VideoProvider(
             GetIt.I<VideoPlayService>(),
           ),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ThemeProvider(),
+        ),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData.light(useMaterial3: true),
-        home: const NotesView(),
-      ),
+      child: Builder(builder: (context) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: context.watch<ThemeProvider>().themeData,
+          home: const NotesView(),
+        );
+      }),
     );
   }
 }

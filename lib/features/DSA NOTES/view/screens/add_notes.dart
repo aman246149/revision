@@ -200,11 +200,7 @@ class _AddNotesState extends State<AddNotes> {
           ),
           bottomNavigationBar: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: TextButton(
-              style: TextButton.styleFrom(
-                  backgroundColor: Colors.green.shade100,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20))),
+            child: ElevatedButton(
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 child: loader

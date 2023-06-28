@@ -1,9 +1,13 @@
+import 'package:dsanotes/providers/theme_provider.dart';
+import 'package:dsanotes/theme/custom_theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 
 class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CommonAppBar({
-    super.key, required this.text,
+    super.key,
+    required this.text,
   });
   final String text;
   @override
@@ -11,11 +15,16 @@ class CommonAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(
         text,
-        style: Theme.of(context)
-            .textTheme
-            .bodyMedium!
-            .copyWith(fontSize: 24, fontWeight: FontWeight.w800),
       ),
+      actions: [
+        IconButton(
+            onPressed: () {
+              context.read<ThemeProvider>().switchCurrentTheme();
+            },
+            icon: context.watch<ThemeProvider>().lightTheme
+                ? Icon(Icons.brightness_4)
+                : Icon(Icons.brightness_2))
+      ],
     );
   }
 
