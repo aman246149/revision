@@ -46,7 +46,7 @@ class MainApp extends StatelessWidget {
       child: Builder(builder: (context) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          theme: context.watch<ThemeProvider>().themeData,
+          theme: ThemeData.light(useMaterial3: true),
           home: const NotesView(),
         );
       }),
