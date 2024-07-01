@@ -4,40 +4,40 @@ publish_to: 'none'
 version: 0.1.0
 
 environment:
-  sdk: '>=2.19.6 <3.0.0'
+  sdk: '>=3.2.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
   
   # add injectable to your dependencies  
-  injectable:  
+  injectable: ^2.3.5  
   # add get_it  
-  get_it:  
+  get_it: ^7.6.7  
   flutter_sound: ^9.2.13
-  audio_session: ^0.1.16
-  permission_handler: ^10.3.0
-  provider: ^6.0.5
-  path_provider: ^2.0.15
+  audio_session: ^0.1.19
+  permission_handler: ^11.3.1
+  provider: ^6.1.2
+  path_provider: ^2.1.3
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-  hive_generator: ^2.0.0
-  intl: ^0.18.1
+  hive_generator: ^2.0.1
+  intl: ^0.19.0
   draggable_bottom_sheet: ^1.0.2
-  just_audio: ^0.9.31
-  just_audio_background: ^0.0.1-beta.9
-  audio_video_progress_bar: ^1.0.1
-  animated_icon: ^0.0.5
-  flutter_animate: ^4.2.0
-  video_player: ^2.6.1
-  url_launcher: ^6.1.11
-  image_picker: ^0.8.4+4
-  file_picker: ^4.3.0
-  dynamic_color: ^1.6.5
-  freezed_annotation: ^2.2.0
-  json_annotation: ^4.8.1
-  flex_color_scheme: ^7.0.5
-  google_fonts: ^4.0.4
+  just_audio: ^0.9.37
+  just_audio_background: ^0.0.1-beta.12
+  audio_video_progress_bar: ^2.0.3
+  animated_icon: ^0.0.9
+  flutter_animate: ^4.5.0
+  video_player: ^2.8.5
+  url_launcher: ^6.3.0
+  image_picker: ^1.0.8
+  file_picker: ^8.0.0+1
+  dynamic_color: ^1.7.0
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.9.0
+  flex_color_scheme: ^7.3.1 
+  google_fonts: 6.0.0
 
 
 
@@ -46,12 +46,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
-  injectable_generator:  
+  flutter_lints: ^4.0.0
+  injectable_generator: ^2.4.2  
   # add build runner if not already added  
-  build_runner: ^2.3.3 
-  freezed: ^2.3.5
-  json_serializable: ^6.6.2
+  build_runner: ^2.4.9 
+  freezed: ^2.5.2
+  json_serializable: ^6.8.0
 
 flutter:
   uses-material-design: true

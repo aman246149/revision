@@ -42,7 +42,24 @@ class _AddNotesState extends State<AddNotes> {
     _selectedOptions.add(NoteOption.Text);
   }
 
+  bool validateAndSave() {
+    if (_questionTitleController.text.isEmpty) {
+      final snackBar = SnackBar(content: Text('Notes Title Can\'t be empty'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      return false;
+    }
+    if (_textNoteController.text.isEmpty) {
+      final snackBar =
+          SnackBar(content: Text('Notes Description Can\'t be empty'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      return false;
+    }
+
+    return true;
+  }
+
   void saveToDatabase() async {
+    if (validateAndSave() == false) return;
     final audioProvider = context.read<AudioProvider>();
     setState(() {
       loader = true;
@@ -104,7 +121,7 @@ class _AddNotesState extends State<AddNotes> {
                   ),
                   const SizedBox(height: 16),
                   const Text(
-                    'Select Note Type',
+                    'Add Different Note Types',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   Wrap(
@@ -229,7 +246,9 @@ class _AddNotesState extends State<AddNotes> {
               // if (option == NoteOption.Text) {
               //   return;
               // }
-              _selectedOptions.remove(option);
+              if (_selectedOptions.length > 1) {
+                _selectedOptions.remove(option);
+              }
             } else {
               _selectedOptions.add(option);
             }
@@ -402,7 +421,7 @@ class _AddNotesState extends State<AddNotes> {
             children: [
               // SizedBox(height: 16),
               Text(
-                'Add Text Note Here',
+                'Add Description Here',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 16),
@@ -410,7 +429,7 @@ class _AddNotesState extends State<AddNotes> {
                 controller: _textNoteController,
                 maxLines: 5,
                 decoration: InputDecoration(
-                  hintText: 'Write Notes ....',
+                  hintText: 'Write Notes  Description....',
                   border: OutlineInputBorder(),
                 ),
                 // Add text-specific logic here
